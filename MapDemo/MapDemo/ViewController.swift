@@ -36,7 +36,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource{
     // MARK: table view data source
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 4
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -48,8 +48,8 @@ extension ViewController: UITableViewDataSource{
         }else if indexPath.row == 1{
             cell.textLabel?.text = "map kit 大头针 截图 POI"
         }else if indexPath.row == 2{
-            cell.textLabel?.text = "map kit 导航 1"
-        }else if indexPath.row == 2{
+            cell.textLabel?.text = "map kit 导航 跳转系统地图"
+        }else if indexPath.row == 3{
             cell.textLabel?.text = "map kit 导航 2"
         }else{
             cell.textLabel?.text = "cell \(indexPath.row)"
@@ -65,13 +65,20 @@ extension ViewController: UITableViewDelegate{
     // MARK: table view delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
+        var v: UIViewController!
         if indexPath.row == 0{
-            let v = LocaDemoViewController()
-            self.navigationController?.pushViewController(v, animated: true)
+            v = LocaDemoViewController()
         }else if indexPath.row == 1{
-            let v = MapDemoViewController()
-            self.navigationController?.pushViewController(v, animated: true)
+            v = MapDemoViewController()
+        }else if indexPath.row == 2{
+            v = MapGuideDemoViewController()
+        }else if indexPath.row == 3{
+            v = MapGuideDemo2ViewController()
+        }
+        
+        if v != nil{
+            self.navigationController?.pushViewController(v!, animated: true)
         }
     }
 }

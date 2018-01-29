@@ -13,7 +13,6 @@ import CoreLocation
 class MapDemoViewController: UIViewController {
 
     private var mapView: MKMapView!
-    private var locationManager: CLLocationManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +20,6 @@ class MapDemoViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.navigationItem.title = "map kit 大头针 截图 POI"
         self.view.backgroundColor = UIColor.white
-        
-        locationManager = CLLocationManager()
-        locationManager.requestWhenInUseAuthorization()
         
         mapView = MKMapView(frame: self.view.bounds)
         self.view.addSubview(mapView)
@@ -77,6 +73,7 @@ class MapDemoViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
         // 1. 获取当前触摸点所在的位置
         guard let point = touches.first?.location(in: mapView) else { return }
         
@@ -154,6 +151,7 @@ class MapDemoViewController: UIViewController {
             print("location access denied")
             
         default:
+            let locationManager = CLLocationManager()
             locationManager.requestWhenInUseAuthorization()
         }
     }
