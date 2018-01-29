@@ -14,6 +14,7 @@
 		1903117A2010488F0001C25D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 190311782010488F0001C25D /* LaunchScreen.storyboard */; };
 		19031182201048F90001C25D /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19031181201048F90001C25D /* LocationService.swift */; };
 		1903118420104B2F0001C25D /* LocaDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903118320104B2F0001C25D /* LocaDemoViewController.swift */; };
+		198394E3201F0168005C3A8F /* MapDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198394E2201F0168005C3A8F /* MapDemoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		1903117B2010488F0001C25D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19031181201048F90001C25D /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		1903118320104B2F0001C25D /* LocaDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaDemoViewController.swift; sourceTree = "<group>"; };
+		198394E2201F0168005C3A8F /* MapDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				19031181201048F90001C25D /* LocationService.swift */,
 				190311712010488E0001C25D /* ViewController.swift */,
 				1903118320104B2F0001C25D /* LocaDemoViewController.swift */,
+				198394E2201F0168005C3A8F /* MapDemoViewController.swift */,
 				190311732010488F0001C25D /* Main.storyboard */,
 				190311762010488F0001C25D /* Assets.xcassets */,
 				190311782010488F0001C25D /* LaunchScreen.storyboard */,
@@ -146,6 +149,7 @@
 				19031182201048F90001C25D /* LocationService.swift in Sources */,
 				1903118420104B2F0001C25D /* LocaDemoViewController.swift in Sources */,
 				190311702010488E0001C25D /* AppDelegate.swift in Sources */,
+				198394E3201F0168005C3A8F /* MapDemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

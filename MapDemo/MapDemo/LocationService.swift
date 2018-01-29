@@ -37,7 +37,9 @@ class LocationService: NSObject {
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.headingFilter = kCLHeadingFilterNone
         locationManager.pausesLocationUpdatesAutomatically = false
+        
         //发送授权申请
+        //CLLocationManager.authorizationStatus()
         locationManager.requestWhenInUseAuthorization()
     }
     // 开始定位
@@ -164,6 +166,15 @@ extension LocationService: CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         //did update heading newHeading=magneticHeading 17.63 trueHeading -1.00 accuracy 25.00 x -5.680 y +18.537 z -28.310 @ 2018-01-18 03:32:35 +0000
         //print("did update heading newHeading=\(newHeading)")
+        
+        // 0.判断当前的角度是否有效(如果此值小于0,代表角度无效)
+        //if newHeading.headingAccuracy < 0 { return }        
+        // 1.获取当前设备朝向（0- 359.9 角度）
+        //let angle = newHeading.magneticHeading
+        // 1.1 把角度转换成为弧度
+        //let hudu = CGFloat(angle / 180 * M_PI)
+        // 2. 反向旋转图片(弧度)
+        //img.transform = CGAffineTransform(rotationAngle: -hudu)
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("did update locations \(locations.count) \(locations)")

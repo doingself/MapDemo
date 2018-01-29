@@ -45,6 +45,12 @@ extension ViewController: UITableViewDataSource{
         
         if indexPath.row == 0 {
             cell.textLabel?.text = "core location 定位"
+        }else if indexPath.row == 1{
+            cell.textLabel?.text = "map kit 大头针 截图 POI"
+        }else if indexPath.row == 2{
+            cell.textLabel?.text = "map kit 导航 1"
+        }else if indexPath.row == 2{
+            cell.textLabel?.text = "map kit 导航 2"
         }else{
             cell.textLabel?.text = "cell \(indexPath.row)"
         }
@@ -62,6 +68,9 @@ extension ViewController: UITableViewDelegate{
         
         if indexPath.row == 0{
             let v = LocaDemoViewController()
+            self.navigationController?.pushViewController(v, animated: true)
+        }else if indexPath.row == 1{
+            let v = MapDemoViewController()
             self.navigationController?.pushViewController(v, animated: true)
         }
     }
