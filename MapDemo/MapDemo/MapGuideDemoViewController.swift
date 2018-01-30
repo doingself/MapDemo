@@ -12,7 +12,6 @@ import CoreLocation
 
 class MapGuideDemoViewController: UIViewController {
 
-    private var mapView: MKMapView!
     private lazy var geoCoder: CLGeocoder = {
         return CLGeocoder()
     }()
@@ -21,15 +20,8 @@ class MapGuideDemoViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.navigationItem.title = "map kit 导航 跳转系统地图"
+        self.navigationItem.title = "map kit 导航 touch 跳转系统地图"
         self.view.backgroundColor = UIColor.white
-    
-        mapView = MKMapView(frame: self.view.bounds)
-        self.view.addSubview(mapView)
-        
-        mapView.delegate = self
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,21 +32,32 @@ class MapGuideDemoViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         // MARK: - 地理编码（导航包括:起点和终点  数据由苹果处理）
-        geoCoder.geocodeAddressString("广州") { (pls: [CLPlacemark]?, error) -> Void in
-            // 1. 拿到广州地标对象
+        geoCoder.geocodeAddressString("北京") { (pls: [CLPlacemark]?, error) -> Void in
+            // 1. 拿到北京地标对象
             let gzPL = pls?.first
             
             self.geoCoder.geocodeAddressString("上海") { (pls: [CLPlacemark]?, error) -> Void in
                 // 2. 拿到上海地标对象
                 let shPL = pls?.first
                 
-                // 3. 调用开始导航的方法（从广州到上海）
+                // 3. 调用开始导航的方法（从北京到上海）
                 self.beginNav(gzPL!, endPLCL: shPL!)
             }
         }
     }
     func beginNav(_ startPLCL: CLPlacemark, endPLCL: CLPlacemark) {
         
+        /*
+        //MKPlacemark(coordinate: CLLocationCoordinate2D, addressDictionary: [String : Any]?)
+        // coordinate 2D ---> MKPlacemark ---> MKMapItem
+        let toCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 30.0, longitude: 30.0)
+        let toMKPlacemark: MKPlacemark = MKPlacemark(coordinate: toCoordinate, addressDictionary: nil)
+        let toLocation: MKMapItem = MKMapItem(placemark: toMKPlacemark)
+        toLocation.name = "去的地方";
+        */
+        
+        // MKPlacemark(placemark: CLPlacemark)
+        // GLGeocoder geocoderAddressString CLPlacemark ---> MKPlacemark ---> MKMapItem
         // 获取起点
         let startplMK: MKPlacemark = MKPlacemark(placemark: startPLCL)
         let startItem: MKMapItem = MKMapItem(placemark: startplMK)
@@ -79,7 +82,6 @@ class MapGuideDemoViewController: UIViewController {
         // 根据 MKMapItem 的起点和终点组成数组, 通过导航地图启动项参数字典, 调用系统的地图APP进行导航
         MKMapItem.openMaps(with: mapItems, launchOptions: dic)
     }
-    
 }
 extension MapGuideDemoViewController: MKMapViewDelegate{
     // MARK: map delegate

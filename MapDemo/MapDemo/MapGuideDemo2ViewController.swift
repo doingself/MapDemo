@@ -20,7 +20,7 @@ class MapGuideDemo2ViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.navigationItem.title = "map kit 导航 跳转系统地图"
+        self.navigationItem.title = "map kit 导航 touch"
         self.view.backgroundColor = UIColor.white
         
         mapView = MKMapView(frame: self.view.bounds)
@@ -38,8 +38,8 @@ class MapGuideDemo2ViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        geoCoder.geocodeAddressString("广州") { (pls: [CLPlacemark]?, error) -> Void in
-            // 1. 拿到广州地标对象
+        geoCoder.geocodeAddressString("北京") { (pls: [CLPlacemark]?, error) -> Void in
+            // 1. 拿到北京地标对象
             let gzPL = pls?.first
             // 1.2 创建圆形的覆盖层数据模型
             let circle1 = MKCircle(center: (gzPL?.location?.coordinate)!, radius: 100000)
@@ -54,7 +54,15 @@ class MapGuideDemo2ViewController: UIViewController {
                 // 2.3 添加覆盖层数据模型到地图上
                 self.mapView.add(circle2)
                 
-                // 3. 调用获取导航线路数据信息的方法
+                // 3 大头针
+                let annotation: MKPointAnnotation = MKPointAnnotation()
+                annotation.title = "上海"
+                annotation.coordinate = (pls?.first?.location?.coordinate)!
+                self.mapView.addAnnotation(annotation)
+                //self.mapView.showAnnotations([annotation], animated: true)
+                
+                
+                //45. 调用获取导航线路数据信息的方法
                 self.getRouteMessage(gzPL!, endCLPL: shPL!)
             }
         }
@@ -73,25 +81,31 @@ class MapGuideDemo2ViewController: UIViewController {
         let endMKPL: MKPlacemark = MKPlacemark(placemark: endCLPL)
         request.destination = MKMapItem(placemark: endMKPL)
         
+        request.transportType = .automobile
+        
         // 1. 创建导航对象，根据请求，获取实际路线信息
         let directions: MKDirections = MKDirections(request: request)
         
         // 2. 调用方法, 开始发送请求,计算路线信息
         directions.calculate { (response:MKDirectionsResponse?, error:Error?) in
-            
-            if error == nil {
-                print(response)
+        
+            if let err = error {
+                print("MKDirections.calculate err = \(err)")
+            }
+            if let resp = response {
+                print(resp)
                 
                 // MARK: - ② 解析导航数据
                 // 遍历 routes （MKRoute对象）：因为有多种路线
-                for route in (response?.routes)! {
-                    print(route.advisoryNotices)
-                    print(route.name, route.distance, route.expectedTravelTime)
+                for route: MKRoute in resp.routes {
                     
                     // 添加覆盖层数据模型,路线对应的几何线路模型（由很多点组成）
                     // 当我们添加一个覆盖层数据模型时, 系统绘自动查找对应的代理方法, 找到对应的覆盖层"视图"
-                    self.mapView.add(route.polyline) // 添加折线
+                    // 添加折线
+                    self.mapView.add(route.polyline, level: MKOverlayLevel.aboveRoads)
                     
+                    print(route.advisoryNotices)
+                    print(route.name, route.distance, route.expectedTravelTime)
                     // 遍历每一种路线的每一个步骤（MKRouteStep对象）
                     for step in route.steps {
                         print(step.instructions) // 打印步骤说明
@@ -102,7 +116,8 @@ class MapGuideDemo2ViewController: UIViewController {
     }
 }
 extension MapGuideDemo2ViewController: MKMapViewDelegate{
-    // MARK: map delegate// MARK: - ③ 添加导航路线到地图
+    // MARK: map delegate
+    // MARK: - ③ 添加导航路线到地图
     // MARK: - 当添加一个覆盖层数据模型到地图上时, 地图会调用这个方法, 查找对应的覆盖层"视图"(渲染图层)
     // 参数1（mapView）：地图    参数2（overlay）：覆盖层"数据模型"   returns: 覆盖层视图
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -110,7 +125,7 @@ extension MapGuideDemo2ViewController: MKMapViewDelegate{
         var resultRender = MKOverlayRenderer()
         
         // 折线覆盖层
-        if overlay.isKind(of: MKPolyline.self) {
+        if overlay is MKPolyline{
             
             // 创建折线渲染对象 (不同的覆盖层数据模型, 对应不同的覆盖层视图来显示)
             let render: MKPolylineRenderer = MKPolylineRenderer(overlay: overlay)
@@ -119,15 +134,15 @@ extension MapGuideDemo2ViewController: MKMapViewDelegate{
             render.strokeColor = UIColor.red    // 设置颜色
             
             resultRender = render
-        }
-        
-        // 圆形覆盖层
-        if overlay.isKind(of: MKCircle.self) {
             
+        }else if overlay is MKCircle {
+            // 圆形覆盖层
             let circleRender: MKCircleRenderer = MKCircleRenderer(overlay: overlay)
             
-            circleRender.fillColor = UIColor.black // 设置填充颜色
-            circleRender.alpha = 0.5               // 设置透明色
+            circleRender.fillColor = UIColor.lightGray // 设置填充颜色
+            circleRender.alpha = 0.3               // 设置透明色
+            circleRender.strokeColor = UIColor.blue
+            circleRender.lineWidth = 2
             
             resultRender = circleRender
         }

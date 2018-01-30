@@ -27,13 +27,14 @@ class MapDemoViewController: UIViewController {
         //为MKMapView设置delegate
         mapView.delegate = self
         
-        // 显示用户当前位置 1 showsUserLocation = true
+        // MARK: 用户位置追踪
+        // 1. 显示用户当前位置 showsUserLocation = true
         //是否显示用户当前位置 ios8之后才有，默认为false
         // 在地图上显示一个蓝点,代表用户的位置,地图不会缩放, 而且当用户位置移动时, 地图不会跟随用户位置移动而移动
         mapView.showsUserLocation = true
         
-        // 显示用户当前位置 2 FollowWithHeading
-        //用户位置追踪(用户位置追踪用于标记用户当前位置，此时会调用定位服务)
+        // 2. 显示用户当前位置 mapView.userTrackingMode = .followWithHeading
+        // 在地图上显示一个蓝点,标识用户所在位置; 而且地图缩放到合适比例,显示用户位置, 当用户位置移动时, 地图会跟随用户位置移动而移动; 但是有时候失效;
         //Follow   跟踪并在地图上显示用户的当前位置
         //FollowWithHeading  跟踪并在地图上显示用户的当前位置，地图会跟随用户的前进方向进行旋转
         mapView.userTrackingMode = .follow
@@ -82,9 +83,7 @@ class MapDemoViewController: UIViewController {
         
         print("touch \(coordinate)")
         
-        // TODO: 添加大头针
-        
-        // 创建3D视图的对象
+        // MARK: 3D视图
         // 参数1: 需要看的位置的中心点   参数2: 从哪个地方看   参数3: 站多高看（眼睛的海拔，单位：米）
         let camera: MKMapCamera = MKMapCamera(
             lookingAtCenter: coordinate,
@@ -92,19 +91,21 @@ class MapDemoViewController: UIViewController {
                 latitude: coordinate.latitude + 0.001,
                 longitude: coordinate.longitude + 0.001
             ),
-            eyeAltitude: 1)
+            eyeAltitude: 10)
         mapView.setCamera(camera, animated: true)
         
-        // 截图
+        // MARK: 截图
         let option: MKMapSnapshotOptions = MKMapSnapshotOptions()
-        option.mapRect = mapView.visibleMapRect  // 设置地图区域
-        option.region = mapView.region       // 设置截图区域(在地图上的区域,作用在地图)
         option.mapType = .standard           // 截图的地图类型
         option.showsPointsOfInterest = true  // 是否显示POI
         option.showsBuildings = true         // 是否显示建筑物
-        // option.size = CGSize(width: 100, height: 100)// 设置截图后的图片大小(作用在输出图像)
-        option.size = self.mapView.frame.size    // 设置截图后的图片大小(作用在输出图像)
         option.scale = UIScreen.main.scale       // 设置截图后的图片比例（默认是屏幕比例， 作用在输出图像）
+        // option.size = CGSize(width: 100, height: 100)// 设置截图后的图片大小(作用在输出图像)
+        
+        option.size = self.mapView.frame.size    // 设置截图后的图片大小(作用在输出图像)
+        option.mapRect = mapView.visibleMapRect  // 设置地图区域
+        option.region = mapView.region       // 设置截图区域(在地图上的区域,作用在地图)
+        
         // 截图对象
         let snapShoter = MKMapSnapshotter(options: option)
         snapShoter.start { (shot: MKMapSnapshot?, error: Error?) in
@@ -119,7 +120,7 @@ class MapDemoViewController: UIViewController {
         }
         
         
-        // POI
+        // MARK: POI
         // 1. 创建一个POI请求
         let request: MKLocalSearchRequest = MKLocalSearchRequest()
         // 2.1 设置请求检索的关键字
@@ -136,6 +137,15 @@ class MapDemoViewController: UIViewController {
             guard let items = response?.mapItems else {return}
             for item: MKMapItem in items{
                 print("local search start item = \(String(describing: item.name))")
+                
+                // MARK: 添加大头针
+                //创建MKPointAnnotation对象——代表一个大头针
+                let pointAnnotation = MKPointAnnotation()
+                pointAnnotation.coordinate = item.placemark.coordinate
+                pointAnnotation.title = item.name
+                pointAnnotation.subtitle = item.phoneNumber
+                //添加大头针
+                self.mapView.addAnnotation(pointAnnotation)
             }
         }
     }
@@ -190,7 +200,7 @@ extension MapDemoViewController: MKMapViewDelegate{
         if annotation is MKUserLocation {
             return nil
         }
-        
+        print("自定义大头针样式")
         let identifier = "pin"
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
         if annotationView == nil {
@@ -256,9 +266,9 @@ extension MapDemoViewController: MKMapViewDelegate{
         
         let coorinate2D = userLocation.coordinate
         
+        // MARK: 添加大头针
         //创建MKPointAnnotation对象——代表一个大头针
         let pointAnnotation = MKPointAnnotation()
-        //设置大头针的经纬度
         pointAnnotation.coordinate = coorinate2D
         pointAnnotation.title = "title"
         pointAnnotation.subtitle = "sub title"

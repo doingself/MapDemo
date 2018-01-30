@@ -146,10 +146,97 @@ search.start { (response: MKLocalSearchResponse?, error: Error?) in
 ```
 
 
+### 使用系统导航
+
+coordinate 2D ---> MKPlacemark ---> MKMapItem
+
+```
+//MKPlacemark(coordinate: CLLocationCoordinate2D, addressDictionary: [String : Any]?)
+// coordinate 2D ---> MKPlacemark ---> MKMapItem
+let toCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 30.0, longitude: 30.0)
+let toMKPlacemark: MKPlacemark = MKPlacemark(coordinate: toCoordinate, addressDictionary: nil)
+let toLocation: MKMapItem = MKMapItem(placemark: toMKPlacemark)
+toLocation.name = "去的地方";
+```
+
+GLGeocoder geocoderAddressString CLPlacemark ---> MKPlacemark ---> MKMapItem
+
+```
+// MKPlacemark(placemark: CLPlacemark)
+// GLGeocoder geocoderAddressString CLPlacemark ---> MKPlacemark ---> MKMapItem
+// 获取起点
+let startplMK: MKPlacemark = MKPlacemark(placemark: startPLCL)
+let startItem: MKMapItem = MKMapItem(placemark: startplMK)
+```
+
+MKMapItem 根据起点和终点, 调用系统的地图APP进行导航
+
+```
+// 设置起点和终点
+let mapItems: [MKMapItem] = [startItem, endItem]
+
+// 设置导航地图启动项参数字典
+let dic: [String : AnyObject] = [
+    // 导航模式:驾驶
+    MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving as AnyObject,
+    // 地图样式：标准样式
+    MKLaunchOptionsMapTypeKey: MKMapType.standard.rawValue as AnyObject,
+    // 显示交通：显示
+    MKLaunchOptionsShowsTrafficKey: true as AnyObject
+]
+
+// 根据 MKMapItem 的起点和终点组成数组, 通过导航地图启动项参数字典, 调用系统的地图APP进行导航
+MKMapItem.openMaps(with: mapItems, launchOptions: dic)
+```
+### MapKit 导航
+
+MKPlacemark ---> MKMapItem ---> MKDirectionsRequest ---> MKDirections calculate ---> MKDirectionsResponse ---> MKRoute
+
+```
+// 创建请求导航路线数据信息
+let request: MKDirectionsRequest = MKDirectionsRequest()
+request.transportType = .automobile
+// 创建起点:根据 CLPlacemark 地标对象创建 MKPlacemark 地标对象
+request.source = MKMapItem
+// 创建终点:根据 CLPlacemark 地标对象创建 MKPlacemark 地标对象)
+request.destination = MKMapItem
+
+// 创建导航对象，根据请求，获取实际路线信息
+let directions: MKDirections = MKDirections(request: request)
+
+// 计算路线信息
+directions.calculate { (response:MKDirectionsResponse?, error:Error?) in
+    if let resp = response {        
+        // 遍历 routes （MKRoute对象）：因为有多种路线
+        for route: MKRoute in resp.routes {            
+            // 添加折线
+            self.mapView.add(route.polyline, level: MKOverlayLevel.aboveRoads)            
+        }
+    }
+}
+```
+
+MKMapViewDelegate
+
+```
+func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    // 折线覆盖层
+    if overlay is MKPolyline{
+        
+        // 创建折线渲染对象 (不同的覆盖层数据模型, 对应不同的覆盖层视图来显示)
+        let render: MKPolylineRenderer = MKPolylineRenderer(overlay: overlay)        
+        render.lineWidth = 6                // 设置线宽
+        render.strokeColor = UIColor.red    // 设置颜色        
+        return render
+
+    }
+    return MKOverlayRenderer()
+}
+```
 
 #### 参考
 
 + location http://www.hangge.com/blog/cache/detail_783.html
 + location http://www.hangge.com/blog/cache/detail_785.html
 + map http://www.hangge.com/blog/cache/detail_787.html
-+ locationhttps://www.jianshu.com/nb/4017614
++ location https://www.jianshu.com/nb/4017614

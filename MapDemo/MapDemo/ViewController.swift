@@ -48,9 +48,9 @@ extension ViewController: UITableViewDataSource{
         }else if indexPath.row == 1{
             cell.textLabel?.text = "map kit 大头针 截图 POI"
         }else if indexPath.row == 2{
-            cell.textLabel?.text = "map kit 导航 跳转系统地图"
+            cell.textLabel?.text = "map kit 导航 touch 跳转系统地图"
         }else if indexPath.row == 3{
-            cell.textLabel?.text = "map kit 导航 2"
+            cell.textLabel?.text = "map kit 导航 touch"
         }else{
             cell.textLabel?.text = "cell \(indexPath.row)"
         }
