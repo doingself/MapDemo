@@ -1,7 +1,13 @@
 # MapDemo
 
-`CoreLocation` 的功能用户获取地理数据 
+`CoreLocation` 的功能用户获取地理数据
+
 `MapKit` 的功能是将 `CoreLocation` 获取的数据使用MapKit框架以UI的形式展示出来
+
++ core location 定位
++ map kit 大头针 截图 POI
++ map kit 导航 touch 跳转系统地图
++ map kit 导航 touch
 
 ## CoreLocation
 
