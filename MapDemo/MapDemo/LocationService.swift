@@ -223,6 +223,12 @@ extension LocationService: CLLocationManagerDelegate{
         
         //获取坐标
         guard let managerLocation:CLLocation = manager.location else{ return }
+        
+        if currentLocation != nil {
+            let distance = currentLocation!.distance(from: managerLocation)
+            print("\t distance = \(distance)")
+        }
+        
         currentLocation = managerLocation
         
         // FIXME: location.coordinate != location.coordinate.latitude, location.coordinate.longitude
@@ -230,10 +236,11 @@ extension LocationService: CLLocationManagerDelegate{
         // latitude , longitude --> CLLocationCoordinate2D == location.coordinate
         let lo = CLLocationCoordinate2D(latitude: managerLocation.coordinate.latitude, longitude: managerLocation.coordinate.longitude)
         let lo2 = CLLocation(latitude: managerLocation.coordinate.latitude, longitude: managerLocation.coordinate.longitude)
-        print("\t location coordinate \(managerLocation.coordinate)")
+        
         print("\t coordinate lat/lon \(managerLocation.coordinate.latitude)  \(managerLocation.coordinate.longitude)")
-        print("\t CLLocationCoordinate2D \(lo)")
-        print("\t location coordinate \(lo2.coordinate)")
+        //print("\t CLLocationCoordinate2D \(lo)")
+        //print("\t location coordinate \(managerLocation.coordinate)")
+        //print("\t location coordinate \(lo2.coordinate)")
         
         
         

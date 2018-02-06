@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class LocaDemoViewController: UIViewController {
 
@@ -58,8 +59,24 @@ class LocaDemoViewController: UIViewController {
         
         locationService.stopLocation()
     }
+    private var tempLocation: CLLocation!
+    private var distanceStr = "0"
+    
     @objc func updateInfoLabel(){
         guard let location = locationService.currentLocation else { return }
-        infoLabel.text = "location = \(location.coordinate)"
+        infoLabel.text = ""
+        if tempLocation != nil{
+            let distince = tempLocation.distance(from: location)
+            if distince > 0.1 {
+                distanceStr.append(String(format: " %0.1f", distince))
+            }
+            infoLabel.text?.append("1 latitude = \(tempLocation.coordinate.latitude)\n")
+            infoLabel.text?.append("1 longitude = \(tempLocation.coordinate.longitude)\n")
+            infoLabel.text?.append(" distince = \(distanceStr)\n")
+        }
+        infoLabel.text?.append("2 latitude = \(location.coordinate.latitude)\n")
+        infoLabel.text?.append("2 longitude = \(location.coordinate.longitude)\n")
+        
+        tempLocation = location
     }
 }
