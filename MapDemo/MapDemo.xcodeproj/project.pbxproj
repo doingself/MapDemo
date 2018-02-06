@@ -14,6 +14,8 @@
 		1903117A2010488F0001C25D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 190311782010488F0001C25D /* LaunchScreen.storyboard */; };
 		19031182201048F90001C25D /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19031181201048F90001C25D /* LocationService.swift */; };
 		1903118420104B2F0001C25D /* LocaDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903118320104B2F0001C25D /* LocaDemoViewController.swift */; };
+		194D91922029429D000066B0 /* CompassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194D91912029429D000066B0 /* CompassViewController.swift */; };
+		194D919620294495000066B0 /* compass.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 194D919420294495000066B0 /* compass.jpg */; };
 		198394E3201F0168005C3A8F /* MapDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198394E2201F0168005C3A8F /* MapDemoViewController.swift */; };
 		198394E5201F22DD005C3A8F /* MapGuideDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198394E4201F22DD005C3A8F /* MapGuideDemoViewController.swift */; };
 		198394E7201F258E005C3A8F /* MapGuideDemo2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198394E6201F258E005C3A8F /* MapGuideDemo2ViewController.swift */; };
@@ -29,6 +31,8 @@
 		1903117B2010488F0001C25D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19031181201048F90001C25D /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		1903118320104B2F0001C25D /* LocaDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaDemoViewController.swift; sourceTree = "<group>"; };
+		194D91912029429D000066B0 /* CompassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassViewController.swift; sourceTree = "<group>"; };
+		194D919420294495000066B0 /* compass.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = compass.jpg; sourceTree = "<group>"; };
 		198394E2201F0168005C3A8F /* MapDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDemoViewController.swift; sourceTree = "<group>"; };
 		198394E4201F22DD005C3A8F /* MapGuideDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideDemoViewController.swift; sourceTree = "<group>"; };
 		198394E6201F258E005C3A8F /* MapGuideDemo2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideDemo2ViewController.swift; sourceTree = "<group>"; };
@@ -67,7 +71,9 @@
 				1903116F2010488E0001C25D /* AppDelegate.swift */,
 				19031181201048F90001C25D /* LocationService.swift */,
 				190311712010488E0001C25D /* ViewController.swift */,
+				194D919420294495000066B0 /* compass.jpg */,
 				1903118320104B2F0001C25D /* LocaDemoViewController.swift */,
+				194D91912029429D000066B0 /* CompassViewController.swift */,
 				198394E2201F0168005C3A8F /* MapDemoViewController.swift */,
 				198394E4201F22DD005C3A8F /* MapGuideDemoViewController.swift */,
 				198394E6201F258E005C3A8F /* MapGuideDemo2ViewController.swift */,
@@ -141,6 +147,7 @@
 				1903117A2010488F0001C25D /* LaunchScreen.storyboard in Resources */,
 				190311772010488F0001C25D /* Assets.xcassets in Resources */,
 				190311752010488F0001C25D /* Main.storyboard in Resources */,
+				194D919620294495000066B0 /* compass.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +161,7 @@
 				190311722010488E0001C25D /* ViewController.swift in Sources */,
 				19031182201048F90001C25D /* LocationService.swift in Sources */,
 				198394E7201F258E005C3A8F /* MapGuideDemo2ViewController.swift in Sources */,
+				194D91922029429D000066B0 /* CompassViewController.swift in Sources */,
 				198394E5201F22DD005C3A8F /* MapGuideDemoViewController.swift in Sources */,
 				1903118420104B2F0001C25D /* LocaDemoViewController.swift in Sources */,
 				190311702010488E0001C25D /* AppDelegate.swift in Sources */,

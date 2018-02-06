@@ -8,10 +8,11 @@
 + map kit 大头针 截图 POI
 + map kit 导航 touch 跳转系统地图
 + map kit 导航 touch
++ 指南针
 
 ## CoreLocation
 
-初始化
+#### 初始化
 
 ```
 locationManager = CLLocationManager()
@@ -40,7 +41,7 @@ locationManager.requestWhenInUseAuthorization()
 ```
 
 
-开始定位
+#### 开始定位
 ```
 if (CLLocationManager.locationServicesEnabled())
 {
@@ -50,13 +51,14 @@ if (CLLocationManager.locationServicesEnabled())
 }
 ```
 
-停止定位
+#### 停止定位
 ```
 locationManager.stopUpdatingLocation()
 locationManager.stopUpdatingHeading()
 ```
 
-代理
+#### 代理
+##### 定位
 ```
 extension LocationService: CLLocationManagerDelegate{
     // MARK: CL location manager delegate
@@ -70,7 +72,27 @@ extension LocationService: CLLocationManagerDelegate{
         currentLocation = managerLocation
     }
 }
+```
 
+##### 方向
+```
+func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+    
+    // 弧度 ＝ 度 × π / 180
+    // 度 ＝ 弧度 × 180° / π
+    // 180度 ＝ π弧度
+    
+    //拿到当前设备朝向 0- 359.9 角度
+    let angle = newHeading.magneticHeading
+    //角度转换成为弧度
+    let arc = CGFloat(angle / 180 * Double.pi)
+    UIView.animate(withDuration: 0.5, animations: {
+        self.imgView.transform = CGAffineTransform(rotationAngle: -arc)
+    })
+    
+    infoLabel.text = "朝向 \(newHeading.magneticHeading)\n"
+    infoLabel.text?.append("精度 \(newHeading.headingAccuracy)\n")
+}
 ```
 
 ## MapKit

@@ -9,9 +9,13 @@
 import UIKit
 import CoreLocation
 
+@objc protocol LocationServiceDelegate: NSObjectProtocol {
+    @objc optional func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading)
+}
 class LocationService: NSObject {
     
     var currentLocation: CLLocation?
+    var delegate: LocationServiceDelegate?
     private var locationManager: CLLocationManager!
     
     override init() {
@@ -41,6 +45,8 @@ class LocationService: NSObject {
         //发送授权申请
         //CLLocationManager.authorizationStatus()
         locationManager.requestWhenInUseAuthorization()
+        
+        self.currentLocation = self.locationManager.location
     }
     // 开始定位
     func startLocation(){
@@ -62,14 +68,14 @@ class LocationService: NSObject {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(addressStr) { (placemarks:[CLPlacemark]?, error:Error?) -> Void in
             if error != nil {
-                print("city to placemark 错误：\(error!.localizedDescription))")
+                print("geocoder.geocodeAddressString 错误：\(error!.localizedDescription))")
                 return
             }
             if let p = placemarks?.first{
                 let str = self.convertPlacemark(placemark: p)
-                print("city to placemark \(addressStr) \(str)")
+                print("geocoder.geocodeAddressString CLPlacemark \(addressStr) \(str)")
             } else {
-                print("city to placemark No placemarks!")
+                print("geocoder.geocodeAddressString No placemarks!")
             }
         }
     }
@@ -82,22 +88,23 @@ class LocationService: NSObject {
             UserDefaults.standard.set(array, forKey: "AppleLanguages")
             //显示所有信息
             if error != nil {
-                print("location to placemark 错误：\(error!.localizedDescription))")
+                print("geocode.reverseGeocodeLocation 错误：\(error!.localizedDescription))")
                 return
             }
             
             if let p = placemarks?.first {
                 //输出反编码信息
                 let str = self.convertPlacemark(placemark: p)
-                print("location to placemark \(str)")
+                print("geocode.reverseGeocodeLocation CLPlacemark \(str)")
             } else {
-                print("location to placemark No placemarks!")
+                print("geocode.reverseGeocodeLocation No placemarks!")
             }
         }
     }
     // location 转 string
     private func convertLocation(location: CLLocation) -> String{
         var str = ""
+        // FIXME: location.coordinate != location.coordinate.latitude, location.coordinate.longitude
         str.append("经度：\(location.coordinate.longitude)\n")
         //获取纬度
         str.append("纬度：\(location.coordinate.latitude)\n")
@@ -167,6 +174,26 @@ extension LocationService: CLLocationManagerDelegate{
         //did update heading newHeading=magneticHeading 17.63 trueHeading -1.00 accuracy 25.00 x -5.680 y +18.537 z -28.310 @ 2018-01-18 03:32:35 +0000
         //print("did update heading newHeading=\(newHeading)")
         
+        //// 磁极方向（磁北对应于随时间变化的地球磁场极点）
+        //newHeading.magneticHeading
+        //// 真实方向（真北始终指向地理北极点）
+        //newHeading.trueHeading
+        ////方向的精度
+        //newHeading.headingAccuracy
+        ////时间
+        //newHeading.timestamp
+        
+        if delegate != nil{
+            delegate?.locationManager?(manager, didUpdateHeading: newHeading)
+        }
+        
+        // 弧度 ＝ 度 × π / 180
+        // 度 ＝ 弧度 × 180° / π
+        // 180度 ＝ π弧度
+        
+        // 90°＝ 90 × π / 180 ＝ π/2 弧度
+        // 60°＝ 60 × π / 180 ＝ π/3 弧度
+        
         // 0.判断当前的角度是否有效(如果此值小于0,代表角度无效)
         //if newHeading.headingAccuracy < 0 { return }        
         // 1.获取当前设备朝向（0- 359.9 角度）
@@ -174,28 +201,45 @@ extension LocationService: CLLocationManagerDelegate{
         // 1.1 把角度转换成为弧度
         //let hudu = CGFloat(angle / 180 * M_PI)
         // 2. 反向旋转图片(弧度)
-        //img.transform = CGAffineTransform(rotationAngle: -hudu)
+        //UIView.animate(withDuration: 0.5, animations: {
+        //    self.compassView.transform = CGAffineTransform(rotationAngle: -arc)
+        //})
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("did update locations \(locations.count) \(locations)")
-        
+        print("\(#function) \(locations.count) \(locations)")
+        /*
         //获取坐标
         guard let currLoca:CLLocation = locations.last else{ return }
         currentLocation = currLoca
         //打印经纬度
-        var str = convertLocation(location: currLoca)
-        print("did update locations.last \(str)")
+        var str = convertLocation(location: currentLocation!)
+        print("\t locations.last \(str)")
+        
+        // location 转 placemark 获取 地名
+        locationToPlacemark(location: currentLocation!)
+        // 根据 地名 获取 经纬度
+        cityToPlacemark(addressStr: "北京体育馆")
+        */
         
         //获取坐标
         guard let managerLocation:CLLocation = manager.location else{ return }
         currentLocation = managerLocation
-        //打印经纬度
-        str = convertLocation(location: managerLocation)
-        print("did update manager.location \(str)")
         
-        // location 转 placemark 获取 地名
-        locationToPlacemark(location: managerLocation)
-        // 根据 地名 获取 经纬度
-        cityToPlacemark(addressStr: "北京体育馆")
+        // FIXME: location.coordinate != location.coordinate.latitude, location.coordinate.longitude
+        // CLLocationCoordinate2D != latitude , longitude
+        // latitude , longitude --> CLLocationCoordinate2D == location.coordinate
+        let lo = CLLocationCoordinate2D(latitude: managerLocation.coordinate.latitude, longitude: managerLocation.coordinate.longitude)
+        let lo2 = CLLocation(latitude: managerLocation.coordinate.latitude, longitude: managerLocation.coordinate.longitude)
+        print("\t location coordinate \(managerLocation.coordinate)")
+        print("\t coordinate lat/lon \(managerLocation.coordinate.latitude)  \(managerLocation.coordinate.longitude)")
+        print("\t CLLocationCoordinate2D \(lo)")
+        print("\t location coordinate \(lo2.coordinate)")
+        
+        
+        
+//        //打印经纬度
+//        let str = convertLocation(location: currentLocation!)
+//        print("\t manager.location \(str)")
+        
     }
 }

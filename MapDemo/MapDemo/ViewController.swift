@@ -36,7 +36,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource{
     // MARK: table view data source
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 5
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -51,6 +51,8 @@ extension ViewController: UITableViewDataSource{
             cell.textLabel?.text = "map kit 导航 touch 跳转系统地图"
         }else if indexPath.row == 3{
             cell.textLabel?.text = "map kit 导航 touch"
+        }else if indexPath.row == 4{
+            cell.textLabel?.text = "core location 指南针"
         }else{
             cell.textLabel?.text = "cell \(indexPath.row)"
         }
@@ -75,6 +77,8 @@ extension ViewController: UITableViewDelegate{
             v = MapGuideDemoViewController()
         }else if indexPath.row == 3{
             v = MapGuideDemo2ViewController()
+        }else if indexPath.row == 4{
+            v = CompassViewController()
         }
         
         if v != nil{
