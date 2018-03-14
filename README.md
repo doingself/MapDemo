@@ -262,7 +262,14 @@ func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayR
 }
 ```
 
-#### 参考
+# Requirements
++ Swift 4
++ iOS 10+
++ Xcode 9+
+
+---
+
+鸣谢
 
 + location http://www.hangge.com/blog/cache/detail_783.html
 + location http://www.hangge.com/blog/cache/detail_785.html
